@@ -120,11 +120,11 @@ window.QUESTIONS=[];
 (() => {
  const add=(module,id,type,prompt,answer,hint,extra={})=>QUESTIONS.push({module,id:`${module}-${id}`,type,prompt,answer,hint,level:'easy',source:module,...extra});
  const choose=(module,id,prompt,options,answer,hint,extra={})=>add(module,id,'choice',prompt,answer,hint,{options,...extra});
- [[5,2],[5,3],[6,2],[7,4],[8,3],[9,4],[10,4],[10,5]].forEach(([total,left],i)=>add('split',i+1,'split',`${total} 可以分成 ${left} 和几？`,String(total-left),`一共有 ${total} 个圆点，绿色的有 ${left} 个。数一数剩下的圆点。`,{total,left,options:[String(total-left),String(total-left+1),String(Math.max(0,total-left-1))],explain:`${left} + ${total-left} = ${total}，你找到了数字好朋友！`}));
- choose('split',9,'9 朵花全部分给两个人，每人能一样多吗？',['能','不能'],'不能','每人先拿 4 朵，还剩 1 朵。花要整朵分，不拆开。',{visual:'🌼 🌼 🌼 🌼 🌼 🌼 🌼 🌼 🌼',explain:'9 分成 4 和 5，两份不一样多。'});
- choose('split',10,'4 − 1 等于几？',['2','3','5'],'3','伸出 4 根手指，收回 1 根。',{visual:'4 − 1 = ?',explain:'4 里面去掉 1，还剩 3。'});
- choose('split',11,'4 + 2 等于几？',['5','6','7'],'6','从 4 接着数：5、6。',{visual:'4 + 2 = ?'});
- choose('split',12,'0 + 5 等于几？',['0','5','6'],'5','没有再增加，还是原来的数量。',{visual:'0 + 5 = ?'});
+ [[10,3],[10,7],[12,5],[13,8],[14,6],[15,9],[16,7],[18,8]].forEach(([total,left],i)=>add('split',i+1,'split',`${total} 可以分成 ${left} 和几？`,String(total-left),`先从 ${left} 接着数到 ${total}，数了几步就是答案。`,{total,left,options:[String(total-left),String(total-left+1),String(Math.max(0,total-left-1))],explain:`${left} + ${total-left} = ${total}，也可以用 ${total} − ${left} = ${total-left}。`}));
+ choose('split',9,'15 个苹果分成两篮，第一篮比第二篮多 3 个。第一篮有几个？',['6','9','12'],'9','先想哪两个数相加是 15，再找相差 3 的一组。',{visual:'🍎 × 15　两篮相差 3',explain:'9 + 6 = 15，而且 9 − 6 = 3，所以第一篮有 9 个。'});
+ choose('split',10,'盒里原有 8 个苹果，又放进一些后共有 17 个。放进了几个？',['8','9','10'],'9','用总数减去原来的数量：17 − 8。',{visual:'8 + ? = 17',explain:'17 − 8 = 9，所以放进了 9 个。'});
+ choose('split',11,'20 个苹果，送出 7 个，再送出 5 个，还剩几个？',['7','8','9'],'8','可以先算一共送出多少个，再从 20 里减掉。',{visual:'20 − 7 − 5 = ?',explain:'7 + 5 = 12，20 − 12 = 8。'});
+ choose('split',12,'小兔有 6 个苹果，小熊比小兔多 4 个。它们一共有几个？',['10','14','16'],'16','先求小熊有几个，再把两人的苹果合起来。',{visual:'🐰 6 个　🐻 多 4 个',explain:'小熊有 6 + 4 = 10 个，一共 6 + 10 = 16 个。'});
  [8,6,7,9,5].forEach((base,i)=>add('ten',i+1,'ten',`已经有 ${base} 颗豆豆，再放几颗就满 10 颗？`,String(10-base),`每一格放一颗。点一点空格，把这 ${10-base} 个空格填满。`,{base,explain:`${base} + ${10-base} = 10。凑成十，算得轻松！`}));
  [['6 + 5',11,'把 5 分成 4 和 1，6 加 4 是 10，再加 1。'],['9 + 7',16,'把 7 分成 1 和 6，9 加 1 是 10，再加 6。'],['9 + 6 + 1',16,'先找好朋友：9 加 1 是 10，再加 6。'],['7 + 8 + 3',18,'7 和 3 凑成 10，再加 8。'],['5 + 4 + 5',14,'5 和 5 凑成 10，再加 4。'],['8 + 6 + 2',16,'8 和 2 凑成 10，再加 6。'],['16 − 7 − 6',3,'先算 16 减 6 得到 10，再减 7。'],['20 − 8 − 10',2,'先算 20 减 10 得到 10，再减 8。']].forEach(([expr,ans,hint],i)=>choose('ten',i+6,`${expr} 等于几？`,[String(ans),String(ans+1),String(ans-1)],String(ans),hint,{visual:`${expr} = ?`,level:'challenge'}));
  choose('pattern',1,'小火车的下一位乘客是谁？',['▲','●','■'],'▲','三角、圆、三角、圆，两个图形轮流来。',{sequence:['▲','●','▲','●','?'],speech:'小火车上依次是三角形、圆形、三角形、圆形。下一个是什么？'});
