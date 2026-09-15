@@ -192,6 +192,8 @@ window.QUESTIONS.push(...[{"id":"lesson-img1-elements-row-1-word-1","module":"ha
 })();
 // Apple Party tests number bonds mentally instead of revealing the answer with countable apples.
 for(const q of QUESTIONS){if(q.module==='split'&&q.type==='split'){q.type='choice';q.visual=`${q.total} − ${q.left} = ?`;q.prompt=`${q.total} 可以分成 ${q.left} 和几？`;q.short=q.prompt;q.speech=q.prompt;}}
+// Bring the two short literacy lessons to a full 20-question round.
+QUESTIONS.push({module:'hanzi',id:'expanded-nature-19',lesson:'nature',type:'choice',level:'easy',source:'nature',scene:'word-gap',prompt:'把词语拼完整',short:'把词语拼完整',speech:'听一听，山水。把少掉的字放回去吧！',hint:'高高的是山，流动的是水。',answer:'水',options:['水','火','田'],completed:'山水。',art:'⛰️💧',parts:['山','']},{module:'hanzi',id:'expanded-nature-20',lesson:'nature',type:'choice',level:'easy',source:'nature',scene:'word-gap',prompt:'把词语拼完整',short:'把词语拼完整',speech:'听一听，禾苗。把少掉的字放回去吧！',hint:'田里长出的庄稼小苗叫禾苗。',answer:'禾',options:['木','禾','火'],completed:'禾苗。',art:'🌱',parts:['','苗']},{module:'hanzi',id:'expanded-garden-20',lesson:'garden',type:'choice',level:'easy',source:'garden',scene:'word-gap',prompt:'把词语拼完整',short:'把词语拼完整',speech:'听一听，八方。把少掉的字放回去吧！',hint:'四面八方，表示周围各个方向。',answer:'八',options:['六','八','十'],completed:'八方。',art:'🧭',parts:['','方']});
 window.WORLDS = [
   {id:'split',name:'苹果派对',icon:'🍎',color:'#ed715a',soft:'#fff0d7',action:'分一分',intro:'阿B，小兔和熊猫来野餐啦！点一个小伙伴，再点苹果，把苹果分给他们。也能把苹果拖进篮子哦。',line:'分苹果，开派对！',reward:'分享小英雄'},
   {id:'ten',name:'飞船出发',icon:'🚀',color:'#6085e7',soft:'#e9efff',action:'点亮它',intro:'我是飞船驾驶员小光！飞船要十颗能量才能起飞。点一点空的能量格，帮飞船充满吧！',line:'给飞船加能量！',reward:'星际驾驶员'},
@@ -496,7 +498,7 @@ function showLessons(moduleId){
  updateChrome();focusTitle();say('点一个小天地，和我出发！','choose-'+moduleId,true);
 }
 function begin(moduleId,fromReview=false,lessonId=null){
- stopScene();let pool=fromReview?QUESTIONS.filter(q=>progress.review.includes(q.id)):moduleId==='pinyin'?QUESTIONS.filter(q=>q.scene==='pinyin'):moduleId==='vocab'?QUESTIONS.filter(q=>q.module==='hanzi'&&q.scene&&q.scene!=='pinyin'):QUESTIONS.filter(q=>q.module===moduleId&&(!lessonId||q.lesson===lessonId)&&(progress.difficulty==='challenge'||q.level==='easy'));
+ stopScene();let pool=fromReview?QUESTIONS.filter(q=>progress.review.includes(q.id)):moduleId==='pinyin'?QUESTIONS.filter(q=>q.scene==='pinyin'):moduleId==='vocab'?QUESTIONS.filter(q=>q.module==='hanzi'&&q.scene&&q.scene!=='pinyin'):QUESTIONS.filter(q=>q.module===moduleId&&(!lessonId||q.lesson===lessonId));
  if(!pool.length){toast('这里已经玩好啦，去别的小岛看看吧。');return;}
  const first=pool[0], unseen=shuffle(pool.filter(q=>!progress.solved.includes(q.id))),known=shuffle(pool.filter(q=>progress.solved.includes(q.id)));
  pool=[...unseen,...known];
