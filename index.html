@@ -240,6 +240,26 @@ window.QUESTION_OPTION_AUDIO = {"lesson-img3-character-1":{"tiān":"spoken-lesso
   let requestedURL = '';
   let state = 'idle';
 
+  function fallbackSpeech(key) {
+    if (!('speechSynthesis' in window)) return Promise.resolve(false);
+    const question = /^read-(.+)$/.exec(key);
+    const q = question && window.QUESTIONS?.find(item => item.id === question[1]);
+    const lesson = /^intro-lesson-(.+)$/.exec(key);
+    const world = /^intro-(.+)$/.exec(key);
+    const text = q ? (window.getMission?.(q)?.short || q.speech || q.prompt) :
+      lesson ? (window.LESSONS?.find(item => item.id === lesson[1])?.line || '') :
+      world ? (window.WORLDS?.find(item => item.id === world[1])?.line || '') : '';
+    if (!text) return Promise.resolve(false);
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'zh-CN'; utterance.rate = .86; utterance.pitch = 1.08; utterance.volume = .9;
+    currentKey = key; state = 'playing'; notifyState();
+    utterance.onend = () => { if (currentKey === key) { state = 'ended'; notifyState(); } };
+    utterance.onerror = () => { if (currentKey === key) { state = 'idle'; notifyState(); } };
+    speechSynthesis.speak(utterance);
+    return Promise.resolve(true);
+  }
+
   function notifyState() {
     window.dispatchEvent(new CustomEvent('abu-audio-state', {detail:{key:currentKey,state}}));
   }
@@ -271,8 +291,7 @@ window.QUESTION_OPTION_AUDIO = {"lesson-img3-character-1":{"tiān":"spoken-lesso
     const source = window.AUDIO_TRACKS?.[key];
     currentKey = key;
     if (typeof source !== 'string') {
-      reportFailure(new Error('Missing audio track'), ticket);
-      return Promise.resolve(false);
+      return fallbackSpeech(key);
     }
     requestedURL = new URL(source, document.baseURI).href;
     player.src = source;
