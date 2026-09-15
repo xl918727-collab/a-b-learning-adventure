@@ -190,6 +190,8 @@ window.QUESTIONS.push(...[{"id":"lesson-img1-elements-row-1-word-1","module":"ha
  [[12,3],[15,4],[18,5],[11,2],[16,7]].forEach(([a,b],i)=>add('logic',i+5,`红队得 ${a} 分，蓝队比红队少 ${b} 分。蓝队得几分？`,[String(a-b-1),String(a-b),String(a-b+1)],a-b,`用 ${a} 减 ${b}。`));
  [['爸','bà','bā','pà'],['妈','mā','má','wā'],['马','mǎ','mā','mà'],['大','dà','tà','dā'],['土','tǔ','dǔ','tù'],['木','mù','mǔ','nù'],['水','shuǐ','suǐ','shuì'],['火','huǒ','hǒu','guǒ'],['日','rì','lì','yì'],['月','yuè','yào','yè'],['山','shān','sān','shàng'],['田','tián','diàn','tán'],['口','kǒu','gǒu','kòu'],['耳','ěr','ér','è']].forEach(([character,answer,b,c],i)=>add('hanzi',i,`“${character}”的拼音是哪一个？`,[answer,b,c],answer,`“${character}”读作 ${answer}。`,{scene:'pinyin',character,art:character,completed:`${character}：${answer}`}));
 })();
+// Apple Party tests number bonds mentally instead of revealing the answer with countable apples.
+for(const q of QUESTIONS){if(q.module==='split'&&q.type==='split'){q.type='choice';q.visual=`${q.total} − ${q.left} = ?`;q.prompt=`${q.total} 可以分成 ${q.left} 和几？`;q.short=q.prompt;q.speech=q.prompt;}}
 window.WORLDS = [
   {id:'split',name:'苹果派对',icon:'🍎',color:'#ed715a',soft:'#fff0d7',action:'分一分',intro:'阿B，小兔和熊猫来野餐啦！点一个小伙伴，再点苹果，把苹果分给他们。也能把苹果拖进篮子哦。',line:'分苹果，开派对！',reward:'分享小英雄'},
   {id:'ten',name:'飞船出发',icon:'🚀',color:'#6085e7',soft:'#e9efff',action:'点亮它',intro:'我是飞船驾驶员小光！飞船要十颗能量才能起飞。点一点空的能量格，帮飞船充满吧！',line:'给飞船加能量！',reward:'星际驾驶员'},
@@ -500,7 +502,7 @@ function begin(moduleId,fromReview=false,lessonId=null){
  pool=[...unseen,...known];
  // A new lesson starts with its own introductory question, then prioritizes unseen content.
  if(!fromReview&&!known.length)pool=[first,...pool.filter(q=>q.id!==first.id)];
- round={module:moduleId,lesson:lessonId,fromReview,questions:pool.slice(0,5),index:0,newStars:0,correctFirst:0};currentView='game';introWorld=null;prepareQuestion();
+ round={module:moduleId,lesson:lessonId,fromReview,questions:pool.slice(0,20),index:0,newStars:0,correctFirst:0};currentView='game';introWorld=null;prepareQuestion();
 }
 function prepareQuestion(){stopScene();const q=round.questions[round.index];Object.assign(round,{solved:false,failed:false,hadHelp:false,selected:[],placed:[],apples:Array(q.total||0).fill('source'),basket:'left',options:shuffle(q.options||[]),counted:[]});renderQuestion();updateChrome();focusTitle();say(getMission(q).short,'read-'+q.id);}
 function pipRow(value){const n=Number(value);return Number.isInteger(n)&&n>0&&n<=10?`<span class="pip-row" aria-hidden="true">${'<i class="pip"></i>'.repeat(n)}</span>`:'';}
